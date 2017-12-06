@@ -49,7 +49,7 @@ operator    "+"|"-"|"*"|"/"|"="|"++"|"--"|"<<"|">>"|"||"|"&&"
 维持，在获得词素之后参照保留字来判断词法单元是什么。其他关键字处理方式与之类似。
 
 ```
-main if then else for void char int signed unsigned return
+main if else for void char int signed unsigned return
 ```
 
 ## 正则表达式到自动机

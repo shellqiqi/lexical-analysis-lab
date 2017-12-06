@@ -1,4 +1,4 @@
-package shell7.Lexer;
+package shell7.lexer;
 
 public class Token {
 
