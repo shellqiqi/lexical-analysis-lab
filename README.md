@@ -1,4 +1,4 @@
-# 编译原理实验报告
+# 词法分析实验
 
 本次实验选择 C 的子集 Mini-C 构造一个词法分析器
 
@@ -57,6 +57,20 @@ main if then else for void char int signed unsigned return
 ### 正则表达式转化为 NFA
 
 表头为 ASCII 码真值，表项为状态机标号。
+
+![WhiteSpace](assets/ws.png)
+
+![Number](assets/number.png)
+
+![ID](assets/id.png)
+
+![Comparision](assets/comparision.png)
+
+![Operator](assets/operator.png)
+
+![Symbol](assets/symbol.png)
+
+![String](assets/string.png)
 
 | ASCII | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----- | --- | --- | --- | --- | --- | --- | --- | --- |
