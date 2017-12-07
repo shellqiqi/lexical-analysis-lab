@@ -1,6 +1,8 @@
 package shell7.lexer;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class DFA {
 
@@ -12,7 +14,7 @@ public class DFA {
         BufferedReader br = new BufferedReader(new FileReader("./resource/dfa.txt"));
         String line;
         int index = 0;
-        while ((line = br.readLine())!=null) {
+        while ((line = br.readLine()) != null) {
             String[] split = line.split("[ \t\n]+");
             for (int i = 0; i < split.length; i++) {
                 if (split[i].equals("*")) // accept and go back
@@ -31,8 +33,7 @@ public class DFA {
             if (table[0][i] == -1) {
                 accept[i] = true;
                 back[i] = true;
-            }
-            else if (table[0][i] == -2) {
+            } else if (table[0][i] == -2) {
                 accept[i] = true;
                 back[i] = false;
             } else {

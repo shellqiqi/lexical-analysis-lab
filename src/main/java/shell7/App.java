@@ -6,9 +6,8 @@ import shell7.lexer.Token;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class App 
-{
-    public static void main( String[] args ) {
+public class App {
+    public static void main(String[] args) {
         try {
             Lexer lexer = new Lexer(new BufferedReader(new FileReader("./resource/test.txt")));
             Token t;

@@ -8,8 +8,8 @@ public class Lexer {
 
     private char peek;
 
-    private DFA dfa ;
-    private Hashtable<String, Word> words;
+    private DFA dfa;
+    private Hashtable<String, Token> words;
 
     private BufferedReader bufferedReader;
 
@@ -21,25 +21,25 @@ public class Lexer {
     private void init() throws Exception {
         peek = ' ';
         dfa = new DFA();
-        words = new Hashtable<String, Word>();
-        reserve(new Word("MAIN", "main"));
-        reserve(new Word("IF", "if"));
-        reserve(new Word("ELSE", "else"));
-        reserve(new Word("FOR", "for"));
-        reserve(new Word("TYPE", "void"));
-        reserve(new Word("TYPE", "char"));
-        reserve(new Word("TYPE", "int"));
-        reserve(new Word("MODIFIER", "signed"));
-        reserve(new Word("MODIFIER", "unsigned"));
-        reserve(new Word("RETURN", "return"));
+        words = new Hashtable<String, Token>();
+        reserve(new Token("MAIN", "main"));
+        reserve(new Token("IF", "if"));
+        reserve(new Token("ELSE", "else"));
+        reserve(new Token("FOR", "for"));
+        reserve(new Token("TYPE", "void"));
+        reserve(new Token("TYPE", "char"));
+        reserve(new Token("TYPE", "int"));
+        reserve(new Token("MODIFIER", "signed"));
+        reserve(new Token("MODIFIER", "unsigned"));
+        reserve(new Token("RETURN", "return"));
     }
 
-    public void reserve(Word w) {
+    public void reserve(Token w) {
         words.put(w.getValue(), w);
     }
 
     public void readNextChar() throws IOException {
-        peek = (char)bufferedReader.read();
+        peek = (char) bufferedReader.read();
     }
 
     public Token getNextToken() throws Exception {
@@ -64,11 +64,11 @@ public class Lexer {
                         buffer = new StringBuffer();
                         continue;
                     }
-                    return new Word(stateName, buffer.toString());
+                    return new Token(stateName, buffer.toString());
                 } else {
                     buffer.append(peek);
                     readNextChar();
-                    return new Word(stateName, buffer.toString());
+                    return new Token(stateName, buffer.toString());
                 }
             }
             state = next;
