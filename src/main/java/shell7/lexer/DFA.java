@@ -4,7 +4,9 @@ import java.io.*;
 
 public class DFA {
 
-    private int[][] table = new int[25][49];
+    private int[][] table = new int[26][50];
+    private boolean[] accept = new boolean[50];
+    private boolean[] back = new boolean[50];
 
     public DFA() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("./resource/dfa.txt"));
@@ -24,6 +26,32 @@ public class DFA {
             }
             index++;
         }
+
+        for (int i = 0; i < accept.length; i++) {
+            if (table[0][i] == -1) {
+                accept[i] = true;
+                back[i] = true;
+            }
+            else if (table[0][i] == -2) {
+                accept[i] = true;
+                back[i] = false;
+            } else {
+                accept[i] = false;
+                back[i] = false;
+            }
+        }
+    }
+
+    public boolean isStop(int state) {
+        return state == -3;
+    }
+
+    public boolean isAccept(int state) {
+        return accept[state];
+    }
+
+    public boolean isBack(int state) {
+        return back[state];
     }
 
     public int nextState(int state, char cond) throws Exception {
@@ -58,7 +86,7 @@ public class DFA {
                 case ';':index = 22;break;
                 case ',':index = 23;break;
                 case '"':index = 24;break;
-                default:throw new Exception("Unknown character");
+                default:index = 25;break;
             }
         }
         return table[index][state];
@@ -74,7 +102,8 @@ public class DFA {
             case 19: case 22: case 24: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: return "OPERATOR";
             case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: return "SYMBOL";
             case 48: return "STRING";
-            default: throw new Exception("Unknown state");
+            case 49: return "STOP";
+            default: return "...";
         }
     }
 }

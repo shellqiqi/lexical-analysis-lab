@@ -1,17 +1,27 @@
 package shell7.lexer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Hashtable;
 
 public class Lexer {
 
-    private static int line = 1;
-    private char peek = ' ';
+    private char peek;
 
-    private DFA dfa = new DFA();
-    private Hashtable words = new Hashtable();
+    private DFA dfa ;
+    private Hashtable<String, Word> words;
 
-    public Lexer() throws IOException {
+    private BufferedReader bufferedReader;
+
+    public Lexer(BufferedReader reader) throws Exception {
+        init();
+        bufferedReader = reader;
+    }
+
+    private void init() throws Exception {
+        peek = ' ';
+        dfa = new DFA();
+        words = new Hashtable<String, Word>();
         reserve(new Word("MAIN", "main"));
         reserve(new Word("IF", "if"));
         reserve(new Word("ELSE", "else"));
@@ -28,32 +38,43 @@ public class Lexer {
         words.put(w.getValue(), w);
     }
 
-    // TODO: make it read file
-    public void readch() throws IOException {
-        peek = (char)System.in.read();
+    public void readNextChar() throws IOException {
+        peek = (char)bufferedReader.read();
     }
 
-    public boolean readch(char c) throws IOException {
-        readch();
-        if (peek != c) return false;
-        peek = ' ';
-        return true;
-    }
-
-    // TODO: complete this
-    public Token scan() throws Exception {
+    public Token getNextToken() throws Exception {
         int state = 0;
-        boolean lookBack = false;
+        int next;
         StringBuffer buffer = new StringBuffer();
+
         while (true) {
-            readch();
-            int nextState =  dfa.nextState(0, peek);
-            if (nextState == -1)
-                return new Word(dfa.stateType(state), buffer.toString());
-            else if (nextState == -2)
-                ;
-            else if (nextState == -3)
-                ;
+            next = dfa.nextState(state, peek);
+            String stateName = dfa.stateType(next);
+
+            if (dfa.isStop(next)) {
+                return null;
+            }
+
+            if (dfa.isAccept(next)) { // Accept state
+                if (dfa.isBack(next)) { // State with *
+                    if (words.containsKey(buffer.toString())) // Check keywords
+                        return words.get(buffer.toString());
+                    if (stateName.equals("WS")) { // Ignore whitespace
+                        state = 0;
+                        buffer = new StringBuffer();
+                        continue;
+                    }
+                    return new Word(stateName, buffer.toString());
+                } else {
+                    buffer.append(peek);
+                    readNextChar();
+                    return new Word(stateName, buffer.toString());
+                }
+            }
+            state = next;
+
+            buffer.append(peek);
+            readNextChar();
         }
     }
 }
